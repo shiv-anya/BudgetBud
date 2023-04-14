@@ -1,0 +1,9 @@
+.container{
+    width: 900px;
+    margin: 0 auto;
+}
+.income_expense{
+    width: 900px;
+    display: flex;
+    justify-content: space-between;
+}
