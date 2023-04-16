@@ -7,7 +7,7 @@
 }
 .card{
     background-color: #fff;
-    height: 450px;
+    height: 575px;
     width: 500px;
     border-radius: 20px;
     box-shadow: #cbc9c9 0px 3px 8px;
@@ -15,10 +15,11 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 2rem;
+    padding: 1rem;
 }
 .card .logo{
     height: 100px;
+    margin-bottom: 20px;
 }
 .card form {
     height: 350px;
@@ -27,6 +28,9 @@
     justify-content: center;
     align-items: center;
     padding: 0 1rem 0 1rem;
+}
+.card p{
+    margin-top: 45px;
 }
 .card form label{
     font-size: 12px;

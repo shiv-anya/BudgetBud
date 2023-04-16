@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import classes from "./Login.module.css";
+import classes from "./SignUp.module.css";
 import Logo from "../assets/logo.png";
-const Login = () => {
+const SignUp = () => {
   const navigate = useNavigate();
-  const loginHandler = () => {
+  const signUpHandler = () => {
     navigate("/dashboard");
   };
   return (
@@ -12,7 +12,15 @@ const Login = () => {
       <div className={classes.hero}>
         <div className={classes.card}>
           <img src={Logo} alt="company logo" className={classes.logo} />
-          <form onSubmit={loginHandler}>
+          <form onSubmit={signUpHandler}>
+            <div>
+              <label htmlFor="firstname">Firstname</label>
+              <input type="text" id="firstname" placeholder="Sam"></input>
+            </div>
+            <div>
+              <label htmlFor="lastName">LastName</label>
+              <input type="text" id="lastName" placeholder="Smith"></input>
+            </div>
             <div>
               <label htmlFor="email">Email</label>
               <input
@@ -25,10 +33,10 @@ const Login = () => {
               <label htmlFor="password">Password</label>
               <input type="password" id="password"></input>
             </div>
-            <button type="submit">Login</button>
+            <button type="submit">Sign Up</button>
           </form>
           <p>
-            Don't have an account? <Link to="/signup">Sign up</Link>
+            Have an account? <Link to="/Login">Login</Link>
           </p>
         </div>
       </div>
@@ -36,4 +44,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
