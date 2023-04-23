@@ -1,31 +1,47 @@
-import React, { useRef } from "react";
-import classes from "./AddTransactionForm.module.css";
+import React, { useEffect, useRef } from "react";
+import classes from "./UpdateTransactionForm.module.css";
 import axios from "axios";
-const AddTransactionForm = () => {
+import { useNavigate, useParams } from "react-router-dom";
+import moment from "moment";
+const UpdateTransactionForm = () => {
+  const navigate = useNavigate();
+  const params = useParams();
   const titleRef = useRef();
   const amountRef = useRef();
   const typeRef = useRef();
   const tagRef = useRef();
   const dateRef = useRef();
   const noteRef = useRef();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/update/${params.transactionId}`)
+      .then((res) => {
+        const transaction = res.data.toBeUpdatedTransaction;
+        titleRef.current.value = transaction.title;
+        amountRef.current.value = transaction.amount;
+        typeRef.current.value = transaction.type;
+        tagRef.current.value = transaction.tag;
+        dateRef.current.value = new Date(transaction.date)
+          .toISOString()
+          .substring(0, 10);
+        noteRef.current.value = transaction.note;
+      });
+  }, []);
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/add-transaction", {
+      .patch(`http://localhost:8000/transactions/${params.transactionId}`, {
         title: titleRef.current.value,
         amount: amountRef.current.value,
         type: typeRef.current.value,
         tag: tagRef.current.value,
         date: new Date(dateRef.current.value),
         note: noteRef.current.value,
+        id: params.transactionId,
       })
-      .then((data) => {
-        titleRef.current.value = "";
-        amountRef.current.value = 0;
-        typeRef.current.value = "";
-        tagRef.current.value = "";
-        dateRef.current.value = new Date().toDateString();
-        noteRef.current.value = "";
+      .then((res) => {
+        alert(res.data.message);
+        navigate("/dashboard");
       });
   };
   return (
@@ -90,9 +106,9 @@ const AddTransactionForm = () => {
           />
         </div>
       </div>
-      <button type="submit">Add Transaction</button>
+      <button type="submit">Update Transaction</button>
     </form>
   );
 };
 
-export default AddTransactionForm;
+export default UpdateTransactionForm;

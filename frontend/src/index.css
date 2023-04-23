@@ -2,6 +2,8 @@
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -9,7 +11,27 @@ html {
 }
 
 body {
-  margin: 0;
-  background-color: #3f3f3f;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 80px;
+}
+ul{
+  list-style: none;
+}
+input{
+  outline: none;
+}
+input:focus,
+input:active {
+  border-color: transparent;
+  outline: 1.5px solid rgb(0, 119, 255);
+}
+select{
+  outline: none;
+}
+select:focus,
+select:active {
+  border-color: transparent;
+  outline: 1.5px solid rgb(0, 119, 255);
 }
 

@@ -1,31 +1,49 @@
 import React from "react";
 import classes from "./Header.module.css";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 const Header = () => {
   return (
     <header>
       <nav className={classes.navbar}>
+        <Link to="/dashboard">
+          <div className={classes.logo}></div>
+        </Link>
         <ul>
           <li>
-            <NavLink to={"/dashboard"}>Dashboard</NavLink>
+            <NavLink to="/dashboard" className={classes.active}>
+              Dashboard
+            </NavLink>
           </li>
           <li>
-            <NavLink>Income</NavLink>
+            <NavLink to="/income" className={classes.active}>
+              Income
+            </NavLink>
           </li>
           <li>
-            <NavLink>Expense</NavLink>
+            <NavLink to="/expense" className={classes.active}>
+              Expense
+            </NavLink>
           </li>
           <li>
-            <NavLink>Add Transaction</NavLink>
+            <NavLink to="/add-transaction" className={classes.active}>
+              Add Transaction
+            </NavLink>
           </li>
           <li>
-            <NavLink>Chart</NavLink>
+            <NavLink className={classes.active}>Chart</NavLink>
           </li>
           <li>
-            <NavLink>About</NavLink>
+            <NavLink to="/about" className={classes.active}>
+              About
+            </NavLink>
           </li>
         </ul>
+        <div className={classes.theme}>
+          <FaSun />
+          {/* <FaMoon /> */}
+        </div>
       </nav>
       <div className={classes.border}></div>
     </header>

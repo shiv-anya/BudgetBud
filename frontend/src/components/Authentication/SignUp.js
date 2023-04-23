@@ -1,11 +1,27 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "./SignUp.module.css";
 import Logo from "../assets/logo.png";
+import axios from "axios";
 const SignUp = () => {
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
   const navigate = useNavigate();
-  const signUpHandler = () => {
-    navigate("/dashboard");
+  const signUpHandler = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:8000/signup", {
+        firstName: firstNameRef.current.value,
+        lastName: lastNameRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      })
+      .then((data) => navigate("/dashboard"))
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
   return (
     <Fragment>
@@ -15,11 +31,21 @@ const SignUp = () => {
           <form onSubmit={signUpHandler}>
             <div>
               <label htmlFor="firstname">Firstname</label>
-              <input type="text" id="firstname" placeholder="Sam"></input>
+              <input
+                type="text"
+                id="firstname"
+                placeholder="Sam"
+                ref={firstNameRef}
+              ></input>
             </div>
             <div>
               <label htmlFor="lastName">LastName</label>
-              <input type="text" id="lastName" placeholder="Smith"></input>
+              <input
+                type="text"
+                id="lastName"
+                placeholder="Smith"
+                ref={lastNameRef}
+              ></input>
             </div>
             <div>
               <label htmlFor="email">Email</label>
@@ -27,11 +53,12 @@ const SignUp = () => {
                 type="email"
                 id="email"
                 placeholder="sg@example.com"
+                ref={emailRef}
               ></input>
             </div>
             <div>
               <label htmlFor="password">Password</label>
-              <input type="password" id="password"></input>
+              <input type="password" id="password" ref={passwordRef}></input>
             </div>
             <button type="submit">Sign Up</button>
           </form>

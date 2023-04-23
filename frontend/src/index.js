@@ -1,6 +1,14 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import Layout from "./components/UI/Layout";
 
-import './index.css';
-import App from './App';
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <BrowserRouter>
+    <Layout>
+      <App />
+    </Layout>
+  </BrowserRouter>,
+  document.getElementById("root")
+);
