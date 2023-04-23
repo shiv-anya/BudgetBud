@@ -69,9 +69,10 @@ exports.postSignup = (req, res, next) => {
   const password = req.body.password;
   User.findOne({ email: email }).then((user) => {
     if (user) {
-      return res.json({
+      res.json({
         message: "Email already exist.",
       });
+      return;
     }
     bcrypt
       .hash(password, 12)
@@ -85,7 +86,6 @@ exports.postSignup = (req, res, next) => {
         return user.save();
       })
       .then((result) => {
-        console.log(result);
         res.json({
           message: "User created",
         });

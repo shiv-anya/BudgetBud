@@ -22,10 +22,7 @@ const usersSchema = new Schema({
   totalBalance: { type: Number, default: 0 },
   totalIncome: { type: Number, default: 0 },
   totalExpense: { type: Number, default: 0 },
-  transactions: {
-    expense: { type: Array },
-    income: { type: Array },
-  },
+  transactions: { type: Array },
 });
 
 module.exports = mongoose.model("Users", usersSchema);

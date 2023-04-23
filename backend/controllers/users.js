@@ -2,10 +2,13 @@ const User = require("../models/users");
 const ObjectId = require("mongodb").ObjectId;
 
 exports.getTransactions = (req, res, next) => {
-  User.find({ _id: new ObjectId("6442a112e3a02c5945f55a1c") })
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
     .then((user) => {
       res.json({
         transactions: user[0].transactions,
+        totalBalance: user[0].totalBalance,
+        totalExpense: user[0].totalExpense,
+        totalIncome: user[0].totalIncome,
       });
     })
     .catch((err) => {
@@ -16,12 +19,13 @@ exports.getTransactions = (req, res, next) => {
 };
 
 exports.getIncomes = (req, res, next) => {
-  User.find({ _id: new ObjectId("6442a112e3a02c5945f55a1c") })
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
     .then((user) => {
       const incomes = user[0].transactions.filter(
         (transaction) => transaction.type === "income"
       );
       res.json({
+        totalIncome: user[0].totalIncome,
         incomes: incomes,
       });
     })
@@ -33,12 +37,13 @@ exports.getIncomes = (req, res, next) => {
 };
 
 exports.getExpenses = (req, res, next) => {
-  User.find({ _id: new ObjectId("6442a112e3a02c5945f55a1c") })
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
     .then((user) => {
       const expenses = user[0].transactions.filter(
         (transaction) => transaction.type === "expense"
       );
       res.json({
+        totalExpense: user[0].totalExpense,
         expenses: expenses,
       });
     })
@@ -65,7 +70,7 @@ exports.addTransaction = (req, res, next) => {
     note,
     _id: new ObjectId(),
   };
-  User.find({ _id: new ObjectId("6442b96f9913346364b4d613") })
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
     .then((user) => {
       if (type === "expense") {
         if (user[0].totalBalance - amount < 0) {
@@ -107,7 +112,7 @@ exports.addTransaction = (req, res, next) => {
 };
 exports.getInfoOfToBeUpdatedTransaction = (req, res, next) => {
   const IdToBeUpdated = new ObjectId(req.params.transactionId);
-  User.find({ _id: new ObjectId("6442b96f9913346364b4d613") })
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
     .then((user) => {
       const toBeUpdatedTransaction = user[0].transactions.find(
         (u) => u._id.toString() === IdToBeUpdated.toString()
@@ -121,15 +126,57 @@ exports.getInfoOfToBeUpdatedTransaction = (req, res, next) => {
     );
 };
 exports.updateTransaction = (req, res, next) => {
+  console.log("was");
   const title = req.body.title;
   const amount = parseInt(req.body.amount);
   const type = req.body.type;
   const tag = req.body.tag;
   const date = req.body.date;
   const note = req.body.note;
-  const oldTransactionId = new ObjectId(req.params.transactionId);
-  User.find({ _id: new ObjectId("6442b96f9913346364b4d613") })
+  const id = new ObjectId(req.body.id);
+  console.log(id);
+  // const oldTransactionId = new ObjectId(req.params.transactionId);
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
     .then((user) => {
+      const toBeUpdatedTransaction = user[0].transactions.find(
+        (t) => t._id.toString() === id.toString(0)
+      );
+      console.log(toBeUpdatedTransaction);
+      let balance = user[0].totalBalance;
+      let expense = user[0].totalExpense;
+      let income = user[0].totalIncome;
+      if (type === toBeUpdatedTransaction.type) {
+        if (type === "expense") {
+          balance += toBeUpdatedTransaction.amount;
+          expense -= toBeUpdatedTransaction.amount;
+          balance -= amount;
+          expense += amount;
+        } else {
+          balance -= toBeUpdatedTransaction.amount;
+          income -= toBeUpdatedTransaction.amount;
+          balance += amount;
+          income += amount;
+          if (balance < 0) {
+            res.json({ message: "Balance can't go negative" });
+            return;
+          }
+        }
+      } else {
+        if (type === "expense") {
+          income -= amount;
+          balance -= amount;
+          if (balance < 0) {
+            res.json({ message: "Balance can't go negative" });
+            return;
+          }
+          expense += amount;
+        } else {
+          balance += amount;
+          expense -= amount;
+          balance += amount;
+          income += amount;
+        }
+      }
       const updatedTransaction = {
         title,
         amount,
@@ -137,13 +184,17 @@ exports.updateTransaction = (req, res, next) => {
         tag,
         date,
         note,
-        _id: oldTransactionId,
+        _id: id,
       };
       const otherTransactions = user[0].transactions.filter(
-        (u) => u._id.toString() !== oldTransactionId.toString()
+        (u) => u._id.toString() !== id.toString()
       );
       otherTransactions.push(updatedTransaction);
       user[0].transactions = otherTransactions;
+      user[0].totalBalance = balance;
+      user[0].totalExpense = expense;
+      user[0].totalIncome = income;
+      console.log(balance + " " + income + " " + expense);
       user[0]
         .save()
         .then(() => res.json({ message: "Successfully updated transaction!" }));
@@ -155,8 +206,22 @@ exports.updateTransaction = (req, res, next) => {
 
 exports.deleteTransaction = (req, res, next) => {
   const IdToBeDeleted = new ObjectId(req.params.transactionId);
-  User.find({ _id: new ObjectId("6442b96f9913346364b4d613") })
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
     .then((user) => {
+      const oldTransaction = user[0].transactions.find(
+        (u) => u._id.toString() === IdToBeDeleted.toString()
+      );
+      if (oldTransaction.type === "expense") {
+        user[0].totalBalance += oldTransaction.amount;
+        user[0].totalExpense -= oldTransaction.amount;
+      } else {
+        if (user[0].totalBalance - oldTransaction.amount < 0) {
+          res.json({ message: "Balance can't go negative." });
+          return;
+        }
+        user[0].totalBalance -= oldTransaction.amount;
+        user[0].totalIncome -= oldTransaction.amount;
+      }
       const newTransactions = user[0].transactions.filter(
         (u) => u._id.toString() !== IdToBeDeleted.toString()
       );

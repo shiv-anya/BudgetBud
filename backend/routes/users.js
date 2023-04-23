@@ -4,15 +4,22 @@ const usersController = require("../controllers/users");
 // const isAuth = require("../middleware/isAuth");
 const router = express.Router();
 
-//Users Routes if user is user only
-// router.get("/users", isAuth, adminController.readUsers);
+router.get("/transactions", usersController.getTransactions);
 
-// router.get("/users/:userId", isAuth, adminController.getSingleUser);
+router.get("/incomes", usersController.getIncomes);
 
-//Users Routes if user is admin
+router.get("/expenses", usersController.getExpenses);
+
+router.get(
+  "/update/:transactionId",
+  usersController.getInfoOfToBeUpdatedTransaction
+);
 
 router.post("/add-transaction", usersController.addTransaction);
 
+router.patch("/transactions/:transactionId", usersController.updateTransaction);
+
+router.delete("/delete/:transactionId", usersController.deleteTransaction);
 // router.patch("/edit-user/:userId", isAuth, adminController.updateUser);
 
 // router.delete("/delete-user/:userId", isAuth, adminController.deleteUser);
