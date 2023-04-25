@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "./Header.module.css";
 import { Link, NavLink } from "react-router-dom";
 import { FaSun, FaMoon } from "react-icons/fa";
 
 const Header = () => {
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => {
+    let newTheme = theme;
+    if (theme === "light" ? (newTheme = "dark") : (newTheme = "light"));
+    console.log(newTheme);
+    setTheme(newTheme);
+    document.body.setAttribute("data-theme", `${newTheme}-theme`);
+  };
   return (
     <header>
       <nav className={classes.navbar}>
@@ -40,9 +48,9 @@ const Header = () => {
             </NavLink>
           </li>
         </ul>
-        <div className={classes.theme}>
-          <FaSun />
-          {/* <FaMoon /> */}
+        <div className={classes.theme} onClick={toggleTheme}>
+          {theme === "dark" && <FaSun />}
+          {theme === "light" && <FaMoon />}
         </div>
       </nav>
       <div className={classes.border}></div>

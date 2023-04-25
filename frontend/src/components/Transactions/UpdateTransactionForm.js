@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import classes from "./UpdateTransactionForm.module.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import moment from "moment";
 const UpdateTransactionForm = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -26,7 +25,7 @@ const UpdateTransactionForm = () => {
           .substring(0, 10);
         noteRef.current.value = transaction.note;
       });
-  }, []);
+  }, [params.transactionId]);
   const submitHandler = (e) => {
     e.preventDefault();
     axios
