@@ -2,7 +2,10 @@ import React, { useEffect, useRef } from "react";
 import classes from "./UpdateTransactionForm.module.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import useAlert from "../Context/customhooks/useAlert";
+
 const UpdateTransactionForm = () => {
+  const { setAlert } = useAlert();
   const navigate = useNavigate();
   const params = useParams();
   const titleRef = useRef();
@@ -39,7 +42,7 @@ const UpdateTransactionForm = () => {
         id: params.transactionId,
       })
       .then((res) => {
-        alert(res.data.message);
+        setAlert(res.data.message);
         navigate("/dashboard");
       });
   };

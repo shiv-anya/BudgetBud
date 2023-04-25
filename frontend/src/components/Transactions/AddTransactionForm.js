@@ -1,7 +1,9 @@
 import React, { useRef } from "react";
 import classes from "./AddTransactionForm.module.css";
 import axios from "axios";
+import useAlert from "../Context/customhooks/useAlert";
 const AddTransactionForm = () => {
+  const { setAlert } = useAlert();
   const titleRef = useRef();
   const amountRef = useRef();
   const typeRef = useRef();
@@ -19,13 +21,14 @@ const AddTransactionForm = () => {
         date: new Date(dateRef.current.value),
         note: noteRef.current.value,
       })
-      .then((data) => {
+      .then((res) => {
         titleRef.current.value = "";
         amountRef.current.value = 0;
         typeRef.current.value = "";
         tagRef.current.value = "";
         dateRef.current.value = new Date().toDateString();
         noteRef.current.value = "";
+        setAlert(res.data.message, "success");
       });
   };
   return (
