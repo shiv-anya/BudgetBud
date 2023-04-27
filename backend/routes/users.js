@@ -15,6 +15,9 @@ router.get(
   usersController.getInfoOfToBeUpdatedTransaction
 );
 
+router.get("/chart/vertical-bar", usersController.getTransactionsYearly);
+router.get("/chart/pie", usersController.getCategoryWise);
+
 router.post("/add-transaction", usersController.addTransaction);
 
 router.patch("/transactions/:transactionId", usersController.updateTransaction);

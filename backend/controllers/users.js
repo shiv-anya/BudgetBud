@@ -54,6 +54,54 @@ exports.getExpenses = (req, res, next) => {
     });
 };
 
+exports.getTransactionsYearly = (req, res, next) => {
+  const transactionsMonthWise = [
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+    [0, 0],
+  ];
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") }).then((user) => {
+    for (let i = 0; i < 12; i++) {
+      const monthArray = [];
+      user[0].transactions.forEach((t, index) => {
+        if (new Date(t.date).getMonth() === i) {
+          if (t.type === "income") {
+            transactionsMonthWise[i][0] += t.amount;
+          } else {
+            transactionsMonthWise[i][1] += t.amount;
+          }
+        }
+      });
+    }
+    res.json(transactionsMonthWise);
+  });
+};
+
+exports.getCategoryWise = (req, res, next) => {
+  const categoryWise = [0, 0, 0, 0, 0, 0, 0];
+  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") }).then((user) => {
+    user[0].transactions.forEach((t) => {
+      if (t.tag === "entertainment") categoryWise[0] += t.amount;
+      if (t.tag === "food") categoryWise[1] += t.amount;
+      if (t.tag === "clothing") categoryWise[2] += t.amount;
+      if (t.tag === "transportation") categoryWise[3] += t.amount;
+      if (t.tag === "bills") categoryWise[4] += t.amount;
+      if (t.tag === "health") categoryWise[5] += t.amount;
+      if (t.tag === "others") categoryWise[6] += t.amount;
+    });
+    res.json(categoryWise);
+  });
+};
+
 exports.addTransaction = (req, res, next) => {
   const title = req.body.title;
   const amount = parseInt(req.body.amount);
