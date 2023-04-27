@@ -8,7 +8,6 @@ const Header = () => {
   const toggleTheme = () => {
     let newTheme = theme;
     if (theme === "light" ? (newTheme = "dark") : (newTheme = "light"));
-    console.log(newTheme);
     setTheme(newTheme);
     document.body.setAttribute("data-theme", `${newTheme}-theme`);
   };
@@ -40,7 +39,9 @@ const Header = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink className={classes.active}>Chart</NavLink>
+            <NavLink to="/chart" className={classes.active}>
+              Chart
+            </NavLink>
           </li>
           <li>
             <NavLink to="/about" className={classes.active}>

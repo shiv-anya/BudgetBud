@@ -10,6 +10,7 @@ import SignUp from "./components/Authentication/SignUp";
 import UpdateTransaction from "./components/Transactions/UpdateTransaction";
 import { AlertProvider } from "./components/Context/AlertContext";
 import AlertPopup from "./components/UI/AlertPopup";
+import Chart from "./components/Chart/Chart";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/income" element={<Income />} />
           <Route path="/expense" element={<Expense />} />
           <Route path="/about" element={<About />} />
+          <Route path="/chart" element={<Chart />} />
           <Route
             path="/update/:transactionId"
             element={<UpdateTransaction />}
