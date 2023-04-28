@@ -55,6 +55,8 @@ exports.getExpenses = (req, res, next) => {
 };
 
 exports.getTransactionsYearly = (req, res, next) => {
+  const year = req.query.year;
+  console.log(year);
   const transactionsMonthWise = [
     [0, 0],
     [0, 0],
@@ -70,9 +72,13 @@ exports.getTransactionsYearly = (req, res, next) => {
     [0, 0],
   ];
   User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") }).then((user) => {
+    const yearlyArray = user[0].transactions.filter(
+      (t) => new Date(t.date).getFullYear() === parseInt(year)
+    );
+    console.log(yearlyArray.length);
     for (let i = 0; i < 12; i++) {
       const monthArray = [];
-      user[0].transactions.forEach((t, index) => {
+      yearlyArray.forEach((t, index) => {
         if (new Date(t.date).getMonth() === i) {
           if (t.type === "income") {
             transactionsMonthWise[i][0] += t.amount;
@@ -82,14 +88,23 @@ exports.getTransactionsYearly = (req, res, next) => {
         }
       });
     }
-    res.json(transactionsMonthWise);
+    res.json({ transactions: transactionsMonthWise });
   });
 };
 
 exports.getCategoryWise = (req, res, next) => {
+  const year = req.query.year;
+  const month = req.query.month;
+  console.log(year + " " + month);
   const categoryWise = [0, 0, 0, 0, 0, 0, 0];
   User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") }).then((user) => {
-    user[0].transactions.forEach((t) => {
+    const yearlyArray = user[0].transactions.filter(
+      (t) => new Date(t.date).getFullYear() === parseInt(year)
+    );
+    const monthlyArray = yearlyArray.filter(
+      (t) => new Date(t.date).getMonth() === parseInt(month)
+    );
+    monthlyArray.forEach((t) => {
       if (t.tag === "entertainment") categoryWise[0] += t.amount;
       if (t.tag === "food") categoryWise[1] += t.amount;
       if (t.tag === "clothing") categoryWise[2] += t.amount;
