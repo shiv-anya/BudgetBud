@@ -14,16 +14,34 @@
     height: 200px;
     width: 600px;
 }
-form{
+.bar form{
     display: flex;
     justify-content: center;
     margin: 20px 0 20px 0;
 }
-select{
+.pie form{
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 20px 0;
+}
+
+.pie select{
     padding: 10px 30px;
     margin-left: 30px;
 }
-button{
+.bar select{
+    padding: 10px 30px;
+    margin-left: 30px;
+}
+.bar button{
+    padding: 10px 30px;
+    border: none;
+    background-color: rgb(0, 119, 255);
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 30px;
+}
+.pie button{
     padding: 10px 30px;
     border: none;
     background-color: rgb(0, 119, 255);
