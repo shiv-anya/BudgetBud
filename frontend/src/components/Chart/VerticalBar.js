@@ -68,10 +68,10 @@ const VerticalChart = () => {
     axios.get("http://localhost:8000/chart/vertical-bar").then((res) => {
       const income = [];
       const expense = [];
-      res.data.forEach((t) => {
+      res.data.transactions.forEach((t, index) => {
         income.push(t[0]);
       });
-      res.data.forEach((t) => {
+      res.data.transactions.forEach((t, index) => {
         expense.push(t[1]);
       });
       setData({
@@ -84,7 +84,7 @@ const VerticalChart = () => {
           },
           {
             label: "Expense",
-            data: labels.map((t, index) => income[index]),
+            data: labels.map((t, index) => expense[index]),
             backgroundColor: "rgba(53, 162, 235, 0.5)",
           },
         ],
