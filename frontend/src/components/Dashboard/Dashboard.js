@@ -4,11 +4,23 @@ import TotalBalanceCard from "./TotalBalanceCard";
 import IncomeExpenseCard from "./IncomeExpenseCard";
 import axios from "axios";
 import TransactionsList from "./TransactionsList";
+import Pagination from "../../Pagination/Pagination";
 const Dashboard = () => {
   const [totalBalance, setTotalBalance] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
   const [transactions, setTransactions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const transactionsPerPage = 5;
+  const indexOfLastTransaction = currentPage * transactionsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const currentTransactions = transactions.slice(
+    indexOfFirstTransaction,
+    indexOfLastTransaction
+  );
+  const paginate = (pageNumber, e) => {
+    setCurrentPage(pageNumber);
+  };
   useEffect(() => {
     axios.get("http://localhost:8000/transactions").then((res) => {
       setTotalBalance(res.data.totalBalance);
@@ -30,7 +42,14 @@ const Dashboard = () => {
           />
         </div>
         <div className={classes.transactions}>
-          <TransactionsList transactions={transactions} />
+          <TransactionsList transactions={currentTransactions} />
+        </div>
+        <div>
+          <Pagination
+            transactionsPerPage={transactionsPerPage}
+            totalTransactions={transactions.length}
+            paginate={paginate}
+          />
         </div>
       </div>
     </Fragment>
