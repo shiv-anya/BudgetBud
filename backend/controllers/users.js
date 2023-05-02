@@ -2,7 +2,8 @@ const User = require("../models/users");
 const ObjectId = require("mongodb").ObjectId;
 
 exports.getTransactions = (req, res, next) => {
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
+  const userId = req.params.userId;
+  User.find({ _id: new ObjectId(userId) })
     .then((user) => {
       res.json({
         transactions: user[0].transactions,
@@ -19,7 +20,8 @@ exports.getTransactions = (req, res, next) => {
 };
 
 exports.getIncomes = (req, res, next) => {
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
+  const userId = req.params.userId;
+  User.find({ _id: new ObjectId(userId) })
     .then((user) => {
       const incomes = user[0].transactions.filter(
         (transaction) => transaction.type === "income"
@@ -37,7 +39,8 @@ exports.getIncomes = (req, res, next) => {
 };
 
 exports.getExpenses = (req, res, next) => {
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
+  const userId = req.params.userId;
+  User.find({ _id: new ObjectId(userId) })
     .then((user) => {
       const expenses = user[0].transactions.filter(
         (transaction) => transaction.type === "expense"
@@ -55,6 +58,7 @@ exports.getExpenses = (req, res, next) => {
 };
 
 exports.getTransactionsYearly = (req, res, next) => {
+  const userId = req.params.userId;
   const year = req.query.year;
   console.log(year);
   const transactionsMonthWise = [
@@ -71,7 +75,7 @@ exports.getTransactionsYearly = (req, res, next) => {
     [0, 0],
     [0, 0],
   ];
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") }).then((user) => {
+  User.find({ _id: new ObjectId(userId) }).then((user) => {
     const yearlyArray = user[0].transactions.filter(
       (t) => new Date(t.date).getFullYear() === parseInt(year)
     );
@@ -93,11 +97,12 @@ exports.getTransactionsYearly = (req, res, next) => {
 };
 
 exports.getCategoryWise = (req, res, next) => {
+  const userId = req.params.userId;
   const year = req.query.year;
   const month = req.query.month;
   console.log(year + " " + month);
   const categoryWise = [0, 0, 0, 0, 0, 0, 0];
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") }).then((user) => {
+  User.find({ _id: new ObjectId(userId) }).then((user) => {
     const yearlyArray = user[0].transactions.filter(
       (t) => new Date(t.date).getFullYear() === parseInt(year)
     );
@@ -118,6 +123,7 @@ exports.getCategoryWise = (req, res, next) => {
 };
 
 exports.addTransaction = (req, res, next) => {
+  const userId = req.params.userId;
   const title = req.body.title;
   const amount = parseInt(req.body.amount);
   const type = req.body.type;
@@ -133,7 +139,7 @@ exports.addTransaction = (req, res, next) => {
     note,
     _id: new ObjectId(),
   };
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
+  User.find({ _id: new ObjectId(userId) })
     .then((user) => {
       if (type === "expense") {
         if (user[0].totalBalance - amount < 0) {
@@ -174,8 +180,9 @@ exports.addTransaction = (req, res, next) => {
     });
 };
 exports.getInfoOfToBeUpdatedTransaction = (req, res, next) => {
+  const userId = req.params.userId;
   const IdToBeUpdated = new ObjectId(req.params.transactionId);
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
+  User.find({ _id: new ObjectId(userId) })
     .then((user) => {
       const toBeUpdatedTransaction = user[0].transactions.find(
         (u) => u._id.toString() === IdToBeUpdated.toString()
@@ -189,7 +196,7 @@ exports.getInfoOfToBeUpdatedTransaction = (req, res, next) => {
     );
 };
 exports.updateTransaction = (req, res, next) => {
-  console.log("was");
+  const userId = req.params.userId;
   const title = req.body.title;
   const amount = parseInt(req.body.amount);
   const type = req.body.type;
@@ -197,9 +204,7 @@ exports.updateTransaction = (req, res, next) => {
   const date = req.body.date;
   const note = req.body.note;
   const id = new ObjectId(req.body.id);
-  console.log(id);
-  // const oldTransactionId = new ObjectId(req.params.transactionId);
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
+  User.find({ _id: new ObjectId(userId) })
     .then((user) => {
       const toBeUpdatedTransaction = user[0].transactions.find(
         (t) => t._id.toString() === id.toString(0)
@@ -268,8 +273,9 @@ exports.updateTransaction = (req, res, next) => {
 };
 
 exports.deleteTransaction = (req, res, next) => {
+  const userId = req.params.userId;
   const IdToBeDeleted = new ObjectId(req.params.transactionId);
-  User.find({ _id: new ObjectId("6443f33838c307efafff4b4d") })
+  User.find({ _id: new ObjectId(userId) })
     .then((user) => {
       const oldTransaction = user[0].transactions.find(
         (u) => u._id.toString() === IdToBeDeleted.toString()
