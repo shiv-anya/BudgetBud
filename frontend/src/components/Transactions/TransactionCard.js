@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import classes from "./TransactionCard.module.css";
 import {
   FaPenSquare,
@@ -14,11 +14,13 @@ import {
 import moment from "moment";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import AuthContext from "../Context/AuthContext";
 
 const TransactionCard = (props) => {
+  const ctx = useContext(AuthContext);
   const deleteHandler = (e) => {
     axios
-      .delete(`http://localhost:8000/delete/${props.id}`)
+      .delete(`http://localhost:8000/${ctx.userId}/delete/${props.id}`)
       .then((res) => {
         alert(res.data.message);
       })

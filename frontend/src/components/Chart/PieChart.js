@@ -1,13 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import classes from "./Chart.module.css";
 import axios from "axios";
+import AuthContext from "../Context/AuthContext";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart = () => {
   const yearRef = useRef();
   const monthRef = useRef();
+  const ctx = useContext(AuthContext);
   const [data, setData] = useState({
     labels: [
       "Entertainment",
@@ -47,7 +49,9 @@ const PieChart = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/chart/pie?year${new Date().getFullYear()}&month=${new Date().getMonth()}`
+        `http://localhost:8000/chart/${
+          ctx.userId
+        }pie?year${new Date().getFullYear()}&month=${new Date().getMonth()}`
       )
       .then((res) => {
         setData({
@@ -87,12 +91,12 @@ const PieChart = () => {
           ],
         });
       });
-  }, []);
+  }, [ctx.userId]);
   const submitHandler = (e) => {
     e.preventDefault();
     axios
       .get(
-        `http://localhost:8000/chart/pie?year=${yearRef.current.value}&month=${monthRef.current.value}`
+        `http://localhost:8000/chart/${ctx.userId}/pie?year=${yearRef.current.value}&month=${monthRef.current.value}`
       )
       .then((res) => {
         setData({

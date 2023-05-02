@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +11,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import classes from "./Chart.module.css";
 import axios from "axios";
+import AuthContext from "../Context/AuthContext";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -50,17 +51,18 @@ const labels = [
 
 const VerticalChart = () => {
   const yearRef = useRef();
+  const ctx = useContext(AuthContext);
   const [data, setData] = useState({
     labels,
     datasets: [
       {
         label: "Income",
-        data: labels.map((t, index) => Math.random() * 1000),
+        data: labels.map((t, index) => Math.random() * 0),
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
         label: "Expense",
-        data: labels.map((t, index) => Math.random() * 1000),
+        data: labels.map((t, index) => Math.random() * 0),
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
@@ -68,7 +70,9 @@ const VerticalChart = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/chart/vertical-bar?year=${new Date().getFullYear()}`
+        `http://localhost:8000/chart/${
+          ctx.userId
+        }/vertical-bar?year=${new Date().getFullYear()}`
       )
       .then((res) => {
         const income = [];
@@ -95,13 +99,13 @@ const VerticalChart = () => {
           ],
         });
       });
-  }, []);
+  }, [ctx.userId]);
   const submitHandler = (e) => {
     e.preventDefault();
 
     axios
       .get(
-        `http://localhost:8000/chart/vertical-bar?year=${yearRef.current.value}`
+        `http://localhost:8000/chart/${ctx.userId}/vertical-bar?year=${yearRef.current.value}`
       )
       .then((res) => {
         const income = [];

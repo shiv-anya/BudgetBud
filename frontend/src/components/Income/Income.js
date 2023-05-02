@@ -1,14 +1,16 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import IncomeExpenseCard from "../Dashboard/IncomeExpenseCard";
 import classes from "./Income.module.css";
 import axios from "axios";
 import IncomesList from "./IncomesList";
-import Pagination from "../../Pagination/Pagination";
+import Pagination from "../UI/Pagination/Pagination";
+import AuthContext from "../Context/AuthContext";
 
 const Income = () => {
   const [totalIncome, setTotalIncome] = useState(0);
   const [incomes, setIncomes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const ctx = useContext(AuthContext);
   const transactionsPerPage = 5;
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
@@ -20,11 +22,11 @@ const Income = () => {
     setCurrentPage(pageNumber);
   };
   useEffect(() => {
-    axios.get("http://localhost:8000/incomes").then((res) => {
+    axios.get(`http://localhost:8000/${ctx.userId}/incomes`).then((res) => {
       setIncomes(res.data.incomes);
       setTotalIncome(res.data.totalIncome);
     });
-  }, [totalIncome]);
+  }, [totalIncome, ctx.userId]);
   return (
     <Fragment>
       <div className={classes.container}>

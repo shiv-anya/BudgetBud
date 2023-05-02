@@ -7,8 +7,8 @@
 }
 .card{
     background-color: #fff;
-    height: 575px;
-    width: 500px;
+    height: 500px;
+    width: 400px;
     border-radius: 20px;
     box-shadow: #cbc9c9 0px 3px 8px;
     display: flex;
@@ -18,41 +18,44 @@
     padding: 1rem;
 }
 .card .logo{
-    height: 100px;
-    margin-bottom: 20px;
+    height: 80px;
+    margin-bottom: 10px;
 }
 .card form {
-    height: 350px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.card form div{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    padding: 0 1rem 0 1rem;
 }
 .card p{
-    margin-top: 45px;
+    margin-top: 150px;
 }
 .card form label{
     font-size: 12px;
     color: #9d9d9d;
-    margin-left: 15px;
+    margin-bottom: 5px;
 }
 .card input{
-    width: 450px;
+    width: 300px;
     font-size: 15px;
     border: none;
     border: 1.5px #e1e0e0 solid;
-    padding: 12px;
-    margin: 5px 0 15px 10px;
+    padding: 10px;
+    margin: 0 0 10px 0;
     border-radius: 5px;
 }
 .card button{
     border: none;
     background-color: rgb(0, 119, 255);
     color: #fff;
-    width: 200px;
+    width: 150px;
     padding: 12px 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
     border-radius: 5px;
 }

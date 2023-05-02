@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import classes from "./AddTransactionForm.module.css";
 import axios from "axios";
 import useAlert from "../Context/customhooks/useAlert";
+import AuthContext from "../Context/AuthContext";
 const AddTransactionForm = () => {
   const { setAlert } = useAlert();
   const titleRef = useRef();
@@ -10,10 +11,11 @@ const AddTransactionForm = () => {
   const tagRef = useRef();
   const dateRef = useRef();
   const noteRef = useRef();
+  const ctx = useContext(AuthContext);
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/add-transaction", {
+      .post(`http://localhost:8000/${ctx.userId}/add-transaction`, {
         title: titleRef.current.value,
         amount: amountRef.current.value,
         type: typeRef.current.value,

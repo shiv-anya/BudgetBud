@@ -1,14 +1,16 @@
-import React, { Fragment, useRef } from "react";
+import React, { Fragment, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "./SignUp.module.css";
 import Logo from "../assets/logo.png";
 import axios from "axios";
+import AuthContext from "../Context/AuthContext";
 const SignUp = () => {
   const firstNameRef = useRef();
   const lastNameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
+  const ctx = useContext(AuthContext);
   const signUpHandler = (e) => {
     e.preventDefault();
     axios
@@ -18,9 +20,10 @@ const SignUp = () => {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       })
-      .then((data) => navigate("/dashboard"))
-      .catch((err) => {
-        console.log(err.message);
+      .then((res) => {
+        const user = res.data;
+        ctx.signup(user.userId, user.userToken);
+        navigate("/dashboard");
       });
   };
   return (

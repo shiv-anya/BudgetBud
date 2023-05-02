@@ -1,13 +1,15 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import AuthContext from "../Context/AuthContext";
 
 const Layout = (props) => {
+  const ctx = useContext(AuthContext);
   return (
     <Fragment>
-      <Header />
+      {ctx.isLoggedIn && <Header />}
       {props.children}
-      <Footer />
+      {ctx.isLoggedIn && <Footer />}
     </Fragment>
   );
 };

@@ -1,4 +1,4 @@
-import { React, Fragment } from "react";
+import { React, Fragment, useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Login from "./components/Authentication/Login";
@@ -11,8 +11,10 @@ import UpdateTransaction from "./components/Transactions/UpdateTransaction";
 import { AlertProvider } from "./components/Context/AlertContext";
 import AlertPopup from "./components/UI/AlertPopup";
 import Chart from "./components/Chart/Chart";
+import AuthContext from "./components/Context/AuthContext";
 
 function App() {
+  const ctx = useContext(AuthContext);
   return (
     <Fragment>
       <AlertProvider>
@@ -21,16 +23,22 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/add-transaction" element={<AddTransaction />} />
-          <Route path="/income" element={<Income />} />
-          <Route path="/expense" element={<Expense />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/chart" element={<Chart />} />
-          <Route
-            path="/update/:transactionId"
-            element={<UpdateTransaction />}
-          />
+          {ctx.isLoggedIn && (
+            <Route path="/dashboard" element={<Dashboard />} />
+          )}
+          {ctx.isLoggedIn && (
+            <Route path="/add-transaction" element={<AddTransaction />} />
+          )}
+          {ctx.isLoggedIn && <Route path="/income" element={<Income />} />}
+          {ctx.isLoggedIn && <Route path="/expense" element={<Expense />} />}
+          {ctx.isLoggedIn && <Route path="/about" element={<About />} />}
+          {ctx.isLoggedIn && <Route path="/chart" element={<Chart />} />}
+          {ctx.isLoggedIn && (
+            <Route
+              path="/update/:transactionId"
+              element={<UpdateTransaction />}
+            />
+          )}
         </Routes>
       </AlertProvider>
     </Fragment>

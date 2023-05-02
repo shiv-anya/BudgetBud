@@ -27,7 +27,6 @@ body[data-theme="dark-theme"]{
 body {
   background-color: var(--bg--color);
   color: var(--text-color);
-  margin-bottom: 80px;
 }
 
 ul{

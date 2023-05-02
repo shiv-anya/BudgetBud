@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import classes from "./UpdateTransactionForm.module.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import useAlert from "../Context/customhooks/useAlert";
+import AuthContext from "../Context/AuthContext";
 
 const UpdateTransactionForm = () => {
   const { setAlert } = useAlert();
@@ -14,6 +15,7 @@ const UpdateTransactionForm = () => {
   const tagRef = useRef();
   const dateRef = useRef();
   const noteRef = useRef();
+  const ctx = useContext(AuthContext);
   useEffect(() => {
     axios
       .get(`http://localhost:8000/update/${params.transactionId}`)
@@ -32,15 +34,18 @@ const UpdateTransactionForm = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .patch(`http://localhost:8000/transactions/${params.transactionId}`, {
-        title: titleRef.current.value,
-        amount: amountRef.current.value,
-        type: typeRef.current.value,
-        tag: tagRef.current.value,
-        date: new Date(dateRef.current.value),
-        note: noteRef.current.value,
-        id: params.transactionId,
-      })
+      .patch(
+        `http://localhost:8000/${ctx.userId}/transactions/${params.transactionId}`,
+        {
+          title: titleRef.current.value,
+          amount: amountRef.current.value,
+          type: typeRef.current.value,
+          tag: tagRef.current.value,
+          date: new Date(dateRef.current.value),
+          note: noteRef.current.value,
+          id: params.transactionId,
+        }
+      )
       .then((res) => {
         setAlert(res.data.message);
         navigate("/dashboard");

@@ -1,11 +1,26 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "./Login.module.css";
 import Logo from "../assets/logo.png";
+import AuthContext from "../Context/AuthContext";
+import axios from "axios";
 const Login = () => {
+  const emailRef = useRef();
+  const passwordRef = useRef();
   const navigate = useNavigate();
-  const loginHandler = () => {
-    navigate("/dashboard");
+  const ctx = useContext(AuthContext);
+  const loginHandler = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:8000/login", {
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      })
+      .then((res) => {
+        const user = res.data;
+        ctx.signup(user.userId, user.userToken);
+        navigate("/dashboard");
+      });
   };
   return (
     <Fragment>
@@ -19,11 +34,12 @@ const Login = () => {
                 type="email"
                 id="email"
                 placeholder="sg@example.com"
+                ref={emailRef}
               ></input>
             </div>
             <div>
               <label htmlFor="password">Password</label>
-              <input type="password" id="password"></input>
+              <input type="password" id="password" ref={passwordRef}></input>
             </div>
             <button type="submit">Login</button>
           </form>

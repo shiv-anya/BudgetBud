@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import classes from "./Header.module.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaSun, FaMoon } from "react-icons/fa";
+import AuthContext from "../Context/AuthContext";
 
 const Header = () => {
   const [theme, setTheme] = useState("light");
@@ -10,6 +11,13 @@ const Header = () => {
     if (theme === "light" ? (newTheme = "dark") : (newTheme = "light"));
     setTheme(newTheme);
     document.body.setAttribute("data-theme", `${newTheme}-theme`);
+  };
+  const navigate = useNavigate();
+  const ctx = useContext(AuthContext);
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    ctx.logout();
+    navigate("/login");
   };
   return (
     <header>
@@ -48,10 +56,15 @@ const Header = () => {
               About
             </NavLink>
           </li>
+          <div className={classes.theme} onClick={toggleTheme}>
+            {theme === "dark" && <FaSun />}
+            {theme === "light" && <FaMoon />}
+          </div>
         </ul>
-        <div className={classes.theme} onClick={toggleTheme}>
-          {theme === "dark" && <FaSun />}
-          {theme === "light" && <FaMoon />}
+        <div className="logout">
+          <form onSubmit={logoutHandler}>
+            <button type="submit">Logout</button>
+          </form>
         </div>
       </nav>
       <div className={classes.border}></div>
