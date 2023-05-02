@@ -1,66 +1,23 @@
 const User = require("../models/users");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { json } = require("body-parser");
 require("dotenv").config();
 
-// const login = (req, res, email, password) => {
-//   User.findOne({ email: email })
-//     .then((user) => {
-//       if (!user) {
-//         return res.json({
-//           message: "Email doesn't exist",
-//         });
-//       }
-//       bcrypt
-//         .compare(password, user.password)
-//         .then((match) => {
-//           if (!match) {
-//             return res.redirect("/login");
-//           }
-//           const token = jwt.sign({ email }, process.env.JSONWEB_SECRET, {
-//             expiresIn: "2h",
-//           });
-//           user.token = token;
-//           user.save().then((data) => {
-//             req.session.user = data;
-//             req.session.save((err) => {
-//               console.log(err);
-//               res.json({
-//                 message: "logged in",
-//                 user: user,
-//               });
-//             });
-//           });
-//         })
-//         .catch((err) => console.log(err));
-//     })
-//     .catch((err) => console.log(err));
-// };
-
-// exports.postLogin = async (req, res, next) => {
-//   const email = req.body.email.toLowerCase();
-//   const password = req.body.password;
-//   const mainUser = await User.findOne({ email: email });
-//   auth.onAuthStateChanged((user) => {
-//     if (user) {
-//       user.reload().then(() => {
-//         if (!user.emailVerified) {
-//           console.log("not verified");
-//           return res.json({
-//             message: "Not verified",
-//           });
-//         } else {
-//           mainUser.isVerified = true;
-//           mainUser.save().then(() => {
-//             login(req, res, email, password);
-//           });
-//         }
-//       });
-//     } else if (mainUser.isVerified) {
-//       login(req, res, email, password);
-//     }
-//   });
-// };
+exports.postLogin = async (req, res, next) => {
+  const email = req.body.email.toLowerCase();
+  const password = req.body.password;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+  const userToken = jwt.sign({ id: user._id }, "imasecretadmirerofdev");
+  res.json({ userId: user._id, userToken, message: "Successfully Logged In" });
+};
 
 exports.postSignup = (req, res, next) => {
   const firstName = req.body.firstName;
@@ -86,9 +43,11 @@ exports.postSignup = (req, res, next) => {
         return user.save();
       })
       .then((result) => {
-        res.json({
-          message: "User created",
-        });
+        const userToken = jwt.sign(
+          { id: result._id.toString() },
+          "imasecretadmirerofdev"
+        );
+        res.json({ userToken, userId: result._id, message: "User created." });
       })
       .catch((error) => {
         res.json({
