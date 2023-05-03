@@ -23,7 +23,7 @@ const Expense = () => {
   };
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_BASE_URL}/${ctx.userId}/expenses`)
+      .get(`${process.env.REACT_APP_BASE_URL}/${ctx.userId}/expenses`)
       .then((res) => {
         setExpenses(res.data.expenses);
         setTotalExpense(res.data.totalExpense);

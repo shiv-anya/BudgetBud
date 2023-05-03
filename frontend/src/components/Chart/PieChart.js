@@ -49,7 +49,7 @@ const PieChart = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_BASE_URL}/chart/${
+        `${process.env.REACT_APP_BASE_URL}/chart/${
           ctx.userId
         }pie?year${new Date().getFullYear()}&month=${new Date().getMonth()}`
       )
@@ -96,7 +96,7 @@ const PieChart = () => {
     e.preventDefault();
     axios
       .get(
-        `${process.env.REACT_BASE_URL}/chart/${ctx.userId}/pie?year=${yearRef.current.value}&month=${monthRef.current.value}`
+        `${process.env.REACT_APP_BASE_URL}/chart/${ctx.userId}/pie?year=${yearRef.current.value}&month=${monthRef.current.value}`
       )
       .then((res) => {
         setData({

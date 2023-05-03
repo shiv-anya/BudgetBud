@@ -23,7 +23,7 @@ const Income = () => {
   };
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_BASE_URL}/${ctx.userId}/incomes`)
+      .get(`${process.env.REACT_APP_BASE_URL}/${ctx.userId}/incomes`)
       .then((res) => {
         setIncomes(res.data.incomes);
         setTotalIncome(res.data.totalIncome);

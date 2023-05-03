@@ -19,7 +19,7 @@ const UpdateTransactionForm = () => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_BASE_URL}/${ctx.userId}/update/${params.transactionId}`
+        `${process.env.REACT_APP_BASE_URL}/${ctx.userId}/update/${params.transactionId}`
       )
       .then((res) => {
         const transaction = res.data.toBeUpdatedTransaction;
@@ -37,7 +37,7 @@ const UpdateTransactionForm = () => {
     e.preventDefault();
     axios
       .patch(
-        `${process.env.REACT_BASE_URL}/${ctx.userId}/transactions/${params.transactionId}`,
+        `${process.env.REACT_APP_BASE_URL}/${ctx.userId}/transactions/${params.transactionId}`,
         {
           title: titleRef.current.value,
           amount: amountRef.current.value,

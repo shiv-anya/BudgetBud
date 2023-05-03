@@ -12,7 +12,7 @@ const Login = () => {
   const loginHandler = (e) => {
     e.preventDefault();
     axios
-      .post(`${process.env.REACT_BASE_URL}/login`, {
+      .post(`${process.env.REACT_APP_BASE_URL}/login`, {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       })

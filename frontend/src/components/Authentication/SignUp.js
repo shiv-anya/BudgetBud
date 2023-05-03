@@ -13,7 +13,6 @@ const SignUp = () => {
   const ctx = useContext(AuthContext);
   const signUpHandler = (e) => {
     e.preventDefault();
-    console.log(process.env.REACT_APP_BASE_URL);
     axios
       .post(`${process.env.REACT_APP_BASE_URL}/signup`, {
         firstName: firstNameRef.current.value,

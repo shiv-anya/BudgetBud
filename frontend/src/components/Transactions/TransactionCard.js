@@ -20,7 +20,9 @@ const TransactionCard = (props) => {
   const ctx = useContext(AuthContext);
   const deleteHandler = (e) => {
     axios
-      .delete(`${process.env.REACT_BASE_URL}/${ctx.userId}/delete/${props.id}`)
+      .delete(
+        `${process.env.REACT_APP_BASE_URL}/${ctx.userId}/delete/${props.id}`
+      )
       .then((res) => {
         alert(res.data.message);
       })

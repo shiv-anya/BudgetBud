@@ -15,7 +15,7 @@ const AddTransactionForm = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .post(`${process.env.REACT_BASE_URL}/${ctx.userId}/add-transaction`, {
+      .post(`${process.env.REACT_APP_BASE_URL}/${ctx.userId}/add-transaction`, {
         title: titleRef.current.value,
         amount: amountRef.current.value,
         type: typeRef.current.value,
