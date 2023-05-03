@@ -32,7 +32,7 @@ const UpdateTransactionForm = () => {
           .substring(0, 10);
         noteRef.current.value = transaction.note;
       });
-  }, [params.transactionId]);
+  }, [params.transactionId, ctx.userId]);
   const submitHandler = (e) => {
     e.preventDefault();
     axios
