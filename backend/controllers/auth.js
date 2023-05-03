@@ -15,7 +15,7 @@ exports.postLogin = async (req, res, next) => {
   if (!isMatch) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
-  const userToken = jwt.sign({ id: user._id }, "imasecretadmirerofdev");
+  const userToken = jwt.sign({ id: user._id }, process.env.SECRET);
   res.json({ userId: user._id, userToken, message: "Successfully Logged In" });
 };
 
@@ -45,7 +45,7 @@ exports.postSignup = (req, res, next) => {
       .then((result) => {
         const userToken = jwt.sign(
           { id: result._id.toString() },
-          "imasecretadmirerofdev"
+          process.env.SECRET
         );
         res.json({ userToken, userId: result._id, message: "User created." });
       })

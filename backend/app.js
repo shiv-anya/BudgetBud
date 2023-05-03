@@ -31,10 +31,10 @@ app.use((req, res, next) => {
 app.use(authRoutes);
 app.use(usersRoutes);
 mongoose
-  .connect("mongodb+srv://sg90883:sg90883@cluster0.oioplhj.mongodb.net/test")
+  .connect(process.env.DB_URI)
   .then(() => {
     console.log("here");
-    app.listen(8000);
+    app.listen(process.env.port, "0.0.0.0");
   })
   .catch((err) => {
     console.log(err);
