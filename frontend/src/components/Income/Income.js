@@ -22,10 +22,12 @@ const Income = () => {
     setCurrentPage(pageNumber);
   };
   useEffect(() => {
-    axios.get(`http://localhost:8000/${ctx.userId}/incomes`).then((res) => {
-      setIncomes(res.data.incomes);
-      setTotalIncome(res.data.totalIncome);
-    });
+    axios
+      .get(`${process.env.REACT_BASE_URL}/${ctx.userId}/incomes`)
+      .then((res) => {
+        setIncomes(res.data.incomes);
+        setTotalIncome(res.data.totalIncome);
+      });
   }, [totalIncome, ctx.userId]);
   return (
     <Fragment>

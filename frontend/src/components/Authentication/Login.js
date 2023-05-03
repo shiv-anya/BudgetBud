@@ -12,7 +12,7 @@ const Login = () => {
   const loginHandler = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/login", {
+      .post(`${process.env.REACT_BASE_URL}/login`, {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       })

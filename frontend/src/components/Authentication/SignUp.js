@@ -14,7 +14,7 @@ const SignUp = () => {
   const signUpHandler = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/signup", {
+      .post(`${process.env.REACT_BASE_URL}/signup`, {
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         email: emailRef.current.value,

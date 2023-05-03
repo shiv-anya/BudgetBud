@@ -22,10 +22,12 @@ const Expense = () => {
     setCurrentPage(pageNumber);
   };
   useEffect(() => {
-    axios.get(`http://localhost:8000/${ctx.userId}/expenses`).then((res) => {
-      setExpenses(res.data.expenses);
-      setTotalExpense(res.data.totalExpense);
-    });
+    axios
+      .get(`${process.env.REACT_BASE_URL}/${ctx.userId}/expenses`)
+      .then((res) => {
+        setExpenses(res.data.expenses);
+        setTotalExpense(res.data.totalExpense);
+      });
   }, [totalExpense, expenses.length, ctx.userId]);
   return (
     <Fragment>

@@ -70,7 +70,7 @@ const VerticalChart = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/chart/${
+        `${process.env.REACT_BASE_URL}/chart/${
           ctx.userId
         }/vertical-bar?year=${new Date().getFullYear()}`
       )
@@ -105,7 +105,7 @@ const VerticalChart = () => {
 
     axios
       .get(
-        `http://localhost:8000/chart/${ctx.userId}/vertical-bar?year=${yearRef.current.value}`
+        `${process.env.REACT_BASE_URL}/chart/${ctx.userId}/vertical-bar?year=${yearRef.current.value}`
       )
       .then((res) => {
         const income = [];

@@ -25,7 +25,7 @@ const Dashboard = () => {
   };
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/${ctx.userId}/transactions`)
+      .get(`${process.env.REACT_BASE_URL}/${ctx.userId}/transactions`)
       .then((res) => {
         setTotalBalance(res.data.totalBalance);
         setTotalExpense(res.data.totalExpense);
