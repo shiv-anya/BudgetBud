@@ -22,6 +22,7 @@ const SignUp = () => {
       })
       .then((res) => {
         const user = res.data;
+        console.log(user);
         ctx.signup(user.userId, user.userToken);
         navigate("/dashboard");
       });

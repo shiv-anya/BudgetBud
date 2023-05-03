@@ -51,7 +51,7 @@ const PieChart = () => {
       .get(
         `${process.env.REACT_APP_BASE_URL}/chart/${
           ctx.userId
-        }pie?year${new Date().getFullYear()}&month=${new Date().getMonth()}`
+        }/pie?year${new Date().getFullYear()}&month=${new Date().getMonth()}`
       )
       .then((res) => {
         setData({
