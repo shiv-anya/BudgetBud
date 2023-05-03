@@ -33,6 +33,7 @@ app.use(usersRoutes);
 mongoose
   .connect(process.env.DB_URI)
   .then(() => {
+    console.log("here");
     app.listen(process.env.PORT);
   })
   .catch((err) => {
