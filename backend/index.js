@@ -6,11 +6,8 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");
 const mongoose = require("mongoose");
-const { MongoClient } = require("mongodb");
-const PORT = process.env.PORT || 8000;
-const uri = process.env.DB_URI;
-const client = new MongoClient(uri);
 require("dotenv").config();
+const port = process.env.PORT || 8000;
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -32,21 +29,18 @@ app.use((req, res, next) => {
 });
 app.use(authRoutes);
 app.use(usersRoutes);
-client.connect((err) => {
-  if (err) {
-    console.error(err);
-    return false;
+mongoose.set("strictQuery", false);
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.DB_URI);
+    console.log("MongoDB connected: " + conn.connection.host);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
   }
-  app.listen(PORT, () => {
-    console.log("listening for requests");
+};
+connectDB().then(() => {
+  app.listen(port, () => {
+    console.log(`Listening on port: ${port}`);
   });
 });
-// mongoose
-//   .connect(process.env.DB_URI)
-//   .then(() => {
-//     console.log("here");
-//     app.listen(process.env.PORT || 8000);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
