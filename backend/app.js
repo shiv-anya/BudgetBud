@@ -5,9 +5,11 @@ const morgan = require("morgan");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");
-const session = require("express-session");
-const MongoDBStore = require("connect-mongodb-session")(session);
 const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
+const PORT = process.env.PORT || 8000;
+const uri = process.env.DB_URI;
+const client = new MongoClient(uri);
 require("dotenv").config();
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,12 +32,21 @@ app.use((req, res, next) => {
 });
 app.use(authRoutes);
 app.use(usersRoutes);
-mongoose
-  .connect(process.env.DB_URI)
-  .then(() => {
-    console.log("here");
-    app.listen(process.env.PORT || 8000);
-  })
-  .catch((err) => {
-    console.log(err);
+client.connect((err) => {
+  if (err) {
+    console.error(err);
+    return false;
+  }
+  app.listen(PORT, () => {
+    console.log("listening for requests");
   });
+});
+// mongoose
+//   .connect(process.env.DB_URI)
+//   .then(() => {
+//     console.log("here");
+//     app.listen(process.env.PORT || 8000);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
